@@ -38,7 +38,7 @@ public class MultiColumnPicker<Left, Right> {
 
     public MultiColumnPicker(Context context) {
         mContext = context;
-        mRoot = View.inflate(context, R.layout.dialog_picker, null);
+        mRoot = View.inflate(context, R.layout.multicolomn_dialog_picker, null);
         mLvLeft = (ListView) mRoot.findViewById(R.id.lv_left);
         mLvRight = (ListView) mRoot.findViewById(R.id.lv_right);
     }
@@ -186,7 +186,7 @@ public class MultiColumnPicker<Left, Right> {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_left, parent, false);
+                convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.multicolomn_item_left, parent, false);
             }
             TextView textView = (TextView) convertView.findViewById(android.R.id.text1);
             if (mMapLeftString != null) {
@@ -222,7 +222,7 @@ public class MultiColumnPicker<Left, Right> {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_right, parent, false);
+                convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.multicolomn_item_right, parent, false);
             }
             TextView textView = (TextView) convertView.findViewById(android.R.id.text1);
             if (mMapRightString != null) {

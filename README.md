@@ -33,7 +33,7 @@ Module Gradle File
 ```Groovy
 dependencies {
     //...
-    compile 'com.twiceyuan.multicolumnpicker:library:1.0.1'
+    compile 'com.twiceyuan.multicolumnpicker:library:1.0.2'
 }
 ```
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <drawable name="white">#ffffffff</drawable>
-    <drawable name="light">#ffeeeeee</drawable>
-    <drawable name="gray">#ffcccccc</drawable>
+    <drawable name="multicolomn_white">#ffffffff</drawable>
+    <drawable name="multicolomn_light">#ffeeeeee</drawable>
+    <drawable name="multicolomn_gray">#ffcccccc</drawable>
 </resources>
