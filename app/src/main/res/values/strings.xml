@@ -3,4 +3,6 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="test1">测试城市选择</string>
+    <string name="test2">测试行业选择</string>
 </resources>

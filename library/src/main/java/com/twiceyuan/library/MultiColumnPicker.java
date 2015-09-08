@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+@SuppressWarnings({"unused", "FieldCanBeLocal"})
 public class MultiColumnPicker<Left, Right> {
 
     private final String TAG = "MultiColumnPicker";
@@ -32,6 +33,8 @@ public class MultiColumnPicker<Left, Right> {
 
     private LeftAdapter mLeftAdapter;
     private RightAdapter mRightAdapter;
+
+    private int mDefaultPosition = 0;
 
     public MultiColumnPicker(Context context) {
         mContext = context;
@@ -103,8 +106,7 @@ public class MultiColumnPicker<Left, Right> {
      * @param position 左列默认位置
      */
     public MultiColumnPicker setLeftDefault(int position) {
-        mLvLeft.performItemClick(mLvLeft.getChildAt(position), position, 0);
-        mLvLeft.smoothScrollToPosition(position);
+        mDefaultPosition = position;
         return this;
     }
 
@@ -119,12 +121,10 @@ public class MultiColumnPicker<Left, Right> {
         }
         for (int i = 0; i < mLeftAdapter.getCount(); i++) {
             if (mMapLeftId.getId(mLeftAdapter.getItem(i)).equals(defaultId)) {
-                mLvLeft.performItemClick(mLvLeft.getChildAt(i), i, 0);
-                mLvLeft.smoothScrollToPosition(i);
+                mDefaultPosition = i;
                 return this;
             }
         }
-        mLvLeft.performItemClick(mLvLeft.getChildAt(0), 0, 0);
         Log.e(TAG, "没有找到 ID 为" + defaultId + "的选项");
         return this;
     }
@@ -140,12 +140,10 @@ public class MultiColumnPicker<Left, Right> {
         }
         for (int i = 0; i < mLeftAdapter.getCount(); i++) {
             if (mMapLeftString.getString(mLeftAdapter.getItem(i)).equals(defaultString)) {
-                mLvLeft.performItemClick(mLvLeft.getChildAt(i), i, 0);
-                mLvLeft.smoothScrollToPosition(i);
+                mDefaultPosition = i;
                 return this;
             }
         }
-        mLvLeft.performItemClick(mLvLeft.getChildAt(0), 0, 0);
         Log.e(TAG, "没有找到 String 为" + defaultString + "的选项");
         return this;
     }
@@ -154,6 +152,9 @@ public class MultiColumnPicker<Left, Right> {
      * 显示
      */
     public void show() {
+        // 滚到默认值
+        mLvLeft.performItemClick(mLvLeft.getChildAt(mDefaultPosition), mDefaultPosition, 0);
+        mLvLeft.smoothScrollToPosition(mDefaultPosition);
         mDialog = new AlertDialog.Builder(mContext)
                 .setView(mRoot)
                 .show();

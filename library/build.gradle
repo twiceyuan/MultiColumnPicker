@@ -1,8 +1,13 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.github.dcendents.android-maven'
+
+version = "1.0.1"
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.0"
+    buildToolsVersion "23.0.1"
+    resourcePrefix "multicolomn_"
 
     defaultConfig {
         minSdkVersion 9
@@ -24,7 +29,81 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.0.0'
+    compile 'com.android.support:appcompat-v7:23.0.1'
+}
+
+def siteUrl = 'https://github.com/twiceyuan/MultiColumnPicker'
+def gitUrl = 'https://github.com/twiceyuan/MultiColumnPicker.git'
+group = "com.twiceyuan.multicolumnpicker"
+
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                packaging 'aar'
+                name 'Android Multiple Column Picker Dialog'
+                url siteUrl
+
+                licenses {
+                    license {
+                        name 'WTFPL'
+                        url 'http://www.wtfpl.net/txt/copying/'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'twiceyuan'
+                        name 'twiceyuan'
+                        email 'twiceyuan@gmail.com'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'source'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    options.encoding = 'UTF-8'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    configurations = ['archives']
+    pkg {
+        repo = "maven"
+        name = "MultiColumnPicker"
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["WTFPL"]
+        publish = true
+    }
 }
 
 apply plugin: 'me.tatarka.retrolambda'

@@ -1,4 +1,7 @@
 # MultiColumnPicker
+
+[ ![Download](https://api.bintray.com/packages/twiceyuan/maven/MultiColumnPicker/images/download.svg) ](https://bintray.com/twiceyuan/maven/MultiColumnPicker/_latestVersion)
+
 a simple multiple column picker by dialog
 
 Screenshot
