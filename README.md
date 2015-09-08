@@ -5,7 +5,7 @@ a simple multiple column picker by dialog
 
 Project Gradle File
 
-```Grovy
+```Groovy
 repositories {
   //...
   maven { url 'https://raw.githubusercontent.com/twiceyuan/multicolumnpicker/master/repository' }
@@ -14,7 +14,7 @@ repositories {
 
 Module Gradle File
 
-```Grovy
+```Groovy
 dependencies {
     //...
     compile 'com.twiceyuan:multicolumnpicker:1.0'
