@@ -4,7 +4,7 @@ a simple multiple column picker by dialog
 Screenshot
 ===
 
-![Screenshot.png](Screenshot.png=256x455)
+<img src="Screenshot.png" alt="Screenshot" style="width: 200px;"/>
 
 Sample
 ===
