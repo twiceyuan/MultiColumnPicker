@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         picker.setOnLeftSelected((position, city) -> right(city));
         picker.setOnRightSelected((position, city) -> action(city));
         picker.setMapLeftString(city -> city.name);
-        picker.setMapRightString(city -> city.name);
+        picker.setMapRightString(city -> city.fullName);
         picker.setMapLeftId(city -> city.id);
         picker.setMapRightId(city -> city.id);
         picker.setLeftDefault("江苏");
