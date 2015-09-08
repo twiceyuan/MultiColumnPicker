@@ -4,7 +4,7 @@ a simple multiple column picker by dialog
 Screenshot
 ===
 
-!(Screenshot.png)[Screenshot.png]
+![Screenshot.png](Screenshot.png)
 
 Sample
 ===
