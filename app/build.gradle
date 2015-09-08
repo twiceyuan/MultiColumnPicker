@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.0"
+    buildToolsVersion "23.0.1"
 
     defaultConfig {
         applicationId "com.twiceyuan.multicolumnpicker"
@@ -25,8 +25,8 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.0.0'
-    compile 'com.twiceyuan:multicolumnpicker:1.0'
+    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.twiceyuan.multicolumnpicker:library:1.0.1'
 }
 
 apply plugin: 'me.tatarka.retrolambda'

@@ -28,21 +28,12 @@ picker.show(); // display
 Usage
 ===
 
-* Project Gradle File
-
-```Groovy
-repositories {
-  //...
-  maven { url 'https://raw.githubusercontent.com/twiceyuan/multicolumnpicker/master/repository' }
-}
-```
-
-* Module Gradle File
+Module Gradle File
 
 ```Groovy
 dependencies {
     //...
-    compile 'com.twiceyuan:multicolumnpicker:1.0'
+    compile 'com.twiceyuan.multicolumnpicker:library:1.0.1'
 }
 ```
 

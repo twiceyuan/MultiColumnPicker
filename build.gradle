@@ -19,6 +19,5 @@ allprojects {
     repositories {
         jcenter()
         mavenCentral()
-        maven { url 'https://raw.githubusercontent.com/twiceyuan/multicolumnpicker/master/repository' }
     }
 }
