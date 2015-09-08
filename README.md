@@ -1,5 +1,7 @@
 # MultiColumnPicker
 
+<a href='https://bintray.com/twiceyuan/maven/MultiColumnPicker/view?source=watch' alt='Get automatic notifications about new "MultiColumnPicker" versions'><img src='https://www.bintray.com/docs/images/bintray_badge_color.png'></a>
+
 [ ![Download](https://api.bintray.com/packages/twiceyuan/maven/MultiColumnPicker/images/download.svg) ](https://bintray.com/twiceyuan/maven/MultiColumnPicker/_latestVersion)
 
 a simple multiple column picker by dialog
