@@ -3,7 +3,7 @@
 <a href='https://bintray.com/twiceyuan/maven/MultiColumnPicker/view?source=watch' alt='Get automatic notifications about new "MultiColumnPicker" versions'><img src='https://www.bintray.com/docs/images/bintray_badge_color.png'></a>
 
 ![Android Library](https://img.shields.io/badge/platform-android-green.svg)
-![Java](https://img.shields.io/badge/language-Java-brown.svg)
+![Java](https://img.shields.io/badge/language-Java-green.svg)
 [ ![Download](https://api.bintray.com/packages/twiceyuan/maven/MultiColumnPicker/images/download.svg) ](https://bintray.com/twiceyuan/maven/MultiColumnPicker/_latestVersion)
 [ ![WTFPL](https://img.shields.io/badge/license-WTFPL-green.svg)](http://www.wtfpl.net/txt/copying/)
 
