@@ -9,7 +9,9 @@ a simple multiple dialog to pick linked data.
 Screenshot
 ===
 
-<img src="Screenshot.png" alt="Screenshot" style="width: 200px;"/>
+<img src="Screenshot1.png" alt="Screenshot" style="width: 180px;"/>
+<img src="Screenshot2.png" alt="Screenshot" style="width: 180px;"/>
+<img src="Screenshot3.png" alt="Screenshot" style="width: 180px;"/>
 
 Sample
 ===
@@ -56,7 +58,7 @@ Module Gradle File
 ```Groovy
 dependencies {
     //...
-    compile 'com.twiceyuan.multicolumnpicker:library:1.1.0'
+    compile 'com.twiceyuan.multicolumnpicker:library:1.1.1'
 }
 ```
 
