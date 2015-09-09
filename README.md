@@ -29,7 +29,7 @@ picker.setLeftAdapter((mapper, businesses) ->
 picker.show(); // display
 ```
 
-### these method must call before call the `show()` method
+### these methods must call before call the `show()` method
 
 * instantiation method
 * setLeftContent
@@ -40,7 +40,7 @@ picker.show(); // display
 * setMapLeftId
 * setMapRightId
 
-### these method is optional
+### these methods are optional
 
 * setLeftDefault
 * setRightAdapter
