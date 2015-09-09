@@ -3,17 +3,16 @@ package com.twiceyuan.multicolumnpicker;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import com.litesuits.orm.db.assit.QueryBuilder;
-import com.twiceyuan.library.MultiColumnPicker;
-import com.twiceyuan.multicolumnpicker.adapter.CustomLeftAdapter;
+import com.twiceyuan.multicolumnpicker.picker.BusinessPicker;
+import com.twiceyuan.multicolumnpicker.picker.CityPicker;
+import com.twiceyuan.multicolumnpicker.picker.DatePicker;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,58 +25,35 @@ public class MainActivity extends AppCompatActivity {
         initBusinessDatabase();
     }
 
+    /**
+     * Test Pick a city
+     */
     public void test(View view) {
-        MultiColumnPicker<City, City> picker = new MultiColumnPicker<>(this);
-        picker.setLeftContent(getProvince());
-        picker.setOnLeftSelected((position, city) -> getCity(city));
-        picker.setOnRightSelected((position, city) -> action(city));
-        picker.setMapLeftString(city -> city.name);
-        picker.setMapRightString(city -> city.fullName);
-        picker.setMapLeftId(city -> city.id);
-        picker.setMapRightId(city -> city.id);
-        picker.setLeftDefault("江苏");
-        picker.show();
+        new CityPicker()
+                .setOnSelected((city3, city21) -> action(city3.fullName + "/" + city21.fullName))
+                .show(this);
     }
 
-    private List<City> getProvince() {
-        return App.db.query(
-                QueryBuilder.create(City.class).whereEquals("parent", "86").orderBy("id"));
-    }
-
-    private List<City> getCity(City city) {
-        return App.db.query(QueryBuilder.create(City.class).whereEquals("parent", city.id));
-    }
-
-
+    /**
+     * Test Pick a business (Use custom adapter)
+     */
     public void test2(View view) {
-        MultiColumnPicker<Business, Business> picker = new MultiColumnPicker<>(this);
-        picker.setLeftContent(getCategories());
-        picker.setOnLeftSelected((position, business) -> getBusiness(business));
-        picker.setOnRightSelected((position, business) -> action2(business));
-        picker.setMapLeftString(business -> business.name);
-        picker.setMapRightString(business -> business.name);
-        picker.setMapLeftId(business -> business.id);
-        picker.setMapRightId(business -> business.id);
-        picker.setLeftAdapter((mapper, businesses) ->
-                new CustomLeftAdapter<>(businesses, mapper)); // 配置自定义适配器
-        picker.setLeftDefault(0);
-        picker.show();
+        new BusinessPicker()
+                .setOnSelected((business, business2) -> action(business.name + "/" + business2.name))
+                .show(this);
     }
 
-    private List<Business> getCategories() {
-        return App.db.query(QueryBuilder.create(Business.class).whereEquals("parent", "00"));
+    /**
+     * Test Pick a year and a month
+     */
+    public void test3(View view) {
+        new DatePicker()
+                .setOnSelected((s, s2) -> action(s + s2))
+                .show(this);
     }
 
-    private List<Business> getBusiness(Business father) {
-        return App.db.query(QueryBuilder.create(Business.class).whereEquals("parent", father.id));
-    }
-
-    private void action(City city) {
-        Toast.makeText(this, city.fullName + city.id, Toast.LENGTH_SHORT).show();
-    }
-
-    private void action2(Business business) {
-        Toast.makeText(this, business.id + "/" + business.name, Toast.LENGTH_SHORT).show();
+    private void action(String action) {
+        ((TextView) findViewById(R.id.tv_show)).setText(action);
     }
 
     /**

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.twiceyuan.library.adapter.ColumnAdapter;
@@ -26,7 +28,7 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
     private Context mContext;
 
     private OnLeftSelected<Left, Right> mOnLeftSelected;
-    private OnRightSelected<Right> mOnRightSelected;
+    private OnRightSelected<Left, Right> mOnRightSelected;
     private MapString<Left> mMapLeftString;
     private MapString<Right> mMapRightString;
     private MapId<Left> mMapLeftId;
@@ -35,6 +37,7 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
     private OnRightAdapterSet<Right> mOnRightAdapterSet;
     private List<Left> mLeftData;
 
+    private LinearLayout mContainer;
     private ListView mLvLeft;
     private ListView mLvRight;
     private View mRoot;
@@ -44,10 +47,12 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
     private ColumnAdapter<Right> mRightAdapter;
 
     private int mDefaultPosition = 0;
+    private DialogHelper.Size mSize;
 
     public MultiColumnPicker(Context context) {
         mContext = context;
         mRoot = View.inflate(context, R.layout.multicolomn_dialog_picker, null);
+        mContainer = (LinearLayout) mRoot.findViewById(R.id.ll_container);
         mLvLeft = (ListView) mRoot.findViewById(R.id.lv_left);
         mLvRight = (ListView) mRoot.findViewById(R.id.lv_right);
     }
@@ -71,7 +76,7 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
                 mLvRight.setAdapter(mRightAdapter);
                 mLvRight.setOnItemClickListener((parent1, view1, position2, id1) -> {
                     if (mOnRightSelected != null) {
-                        mOnRightSelected.onRightSelected(position2, rights.get(position2));
+                        mOnRightSelected.onRightSelected(lefts.get(position), rights.get(position2));
                         mDialog.dismiss();
                     }
                 });
@@ -91,7 +96,7 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
     /**
      * 配置右侧监听器（结束回调结果）
      */
-    public MultiColumnPicker setOnRightSelected(OnRightSelected<Right> onRightSelected) {
+    public MultiColumnPicker setOnRightSelected(OnRightSelected<Left, Right> onRightSelected) {
         mOnRightSelected = onRightSelected;
         return this;
     }
@@ -175,10 +180,13 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
         mLvLeft.setAdapter(mLeftAdapter);
         // 滚到默认值
         mLvLeft.performItemClick(mLvLeft.getChildAt(mDefaultPosition), mDefaultPosition, 0);
-        mLvLeft.smoothScrollToPosition(mDefaultPosition);
+        mLvLeft.setSelection(mDefaultPosition);
         mDialog = new AlertDialog.Builder(mContext)
                 .setView(mRoot)
                 .show();
+        if (mSize != null) {
+            mSize.resize(mDialog);
+        }
     }
 
     @Override
@@ -197,6 +205,32 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
         return "";
     }
 
+    /**
+     * 配置权重比（默认 1:2）
+     *
+     * @param left  左列权重
+     * @param right 右列权重
+     */
+    public MultiColumnPicker setWeight(int left, int right) {
+        mContainer.setWeightSum(left + right);
+        mLvLeft.setLayoutParams(
+                new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, left));
+        mLvRight.setLayoutParams(
+                new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, right));
+        return this;
+    }
+
+    /**
+     * 设置对话框尺寸（默认都为 match_parent）
+     *
+     * @param width  宽度
+     * @param height 高度
+     */
+    public MultiColumnPicker setSize(int width, int height) {
+        mSize = new DialogHelper.Size(width, height);
+        return this;
+    }
+
     public interface OnLeftAdapterSet<Left> {
         ColumnAdapter<Left> provideLeftAdapter(LeftStringMapper<Left> mapper, List<Left> lefts);
     }
@@ -207,6 +241,7 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
 
     /**
      * 配置左侧适配器回调
+     *
      * @param onLeftAdapterSet 左侧适配器回调
      */
     public void setLeftAdapter(OnLeftAdapterSet<Left> onLeftAdapterSet) {
@@ -215,6 +250,7 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
 
     /**
      * 配置右侧适配器回调
+     *
      * @param onRightAdapterSet 右侧适配器回调
      */
     public void setRightAdapter(OnRightAdapterSet<Right> onRightAdapterSet) {

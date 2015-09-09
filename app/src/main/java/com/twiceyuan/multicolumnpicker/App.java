@@ -6,6 +6,8 @@ import com.litesuits.orm.LiteOrm;
 
 /**
  * Created by twiceYuan on 9/7/15.
+ *
+ * Application class
  */
 public class App extends Application {
 

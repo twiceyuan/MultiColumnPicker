@@ -5,6 +5,6 @@ package com.twiceyuan.library.listener;
  *
  * 右侧被选择
  */
-public interface OnRightSelected<Right> {
-    void onRightSelected(int position, Right right);
+public interface OnRightSelected<Left, Right> {
+    void onRightSelected(Left left, Right right);
 }
