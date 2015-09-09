@@ -1,13 +1,10 @@
 # MultiColumnPicker
 
-<a href='https://bintray.com/twiceyuan/maven/MultiColumnPicker/view?source=watch' alt='Get automatic notifications about new "MultiColumnPicker" versions'><img src='https://www.bintray.com/docs/images/bintray_badge_color.png'></a>
-
 ![Android Library](https://img.shields.io/badge/platform-android-green.svg)
 [ ![Download](https://api.bintray.com/packages/twiceyuan/maven/MultiColumnPicker/images/download.svg) ](https://bintray.com/twiceyuan/maven/MultiColumnPicker/_latestVersion)
 [ ![WTFPL](http://img.shields.io/badge/license-WTFPL-green.svg)](http://www.wtfpl.net/txt/copying/)
 
-
-a simple multiple column picker by dialog
+a simple multiple dialog to pick linked data.
 
 Screenshot
 ===
@@ -27,8 +24,29 @@ picker.setMapRightString(city -> city.name);
 picker.setMapLeftId(city -> city.id); // map city to city's id
 picker.setMapRightId(city -> city.id);
 picker.setLeftDefault("江苏"); // set default value (left)
+picker.setLeftAdapter((mapper, businesses) ->
+                new CustomLeftAdapter<>(businesses, mapper)); // setup custom adapter
 picker.show(); // display
 ```
+
+### these method must call before call the `show()` method
+
+* instantiation method
+* setLeftContent
+* setOnLeftSelected
+* setOnRightSelected
+* setMapLeftString
+* setMapRightString
+* setMapLeftId
+* setMapRightId
+
+### these method is optional
+
+* setLeftDefault
+* setRightAdapter
+* setLeftAdapter
+
+Read sample module to find more detail.
 
 Usage
 ===

@@ -1,4 +1,4 @@
-package com.twiceyuan.library;
+package com.twiceyuan.library.map;
 
 /**
  * Created by twiceYuan on 9/8/15.

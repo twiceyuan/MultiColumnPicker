@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.github.dcendents.android-maven'
 
-version = "1.0.2"
+version = "1.1.0"
 
 android {
     compileSdkVersion 23
@@ -12,8 +12,8 @@ android {
     defaultConfig {
         minSdkVersion 9
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1.0"
     }
     buildTypes {
         release {
@@ -34,6 +34,9 @@ dependencies {
 
 def siteUrl = 'https://github.com/twiceyuan/MultiColumnPicker'
 def gitUrl = 'https://github.com/twiceyuan/MultiColumnPicker.git'
+def projectName = 'Android Multiple Column Picker Dialog'
+def licenseName = 'WTFPL'
+def developerName = 'twiceyuan'
 group = "com.twiceyuan.multicolumnpicker"
 
 install {
@@ -41,19 +44,19 @@ install {
         pom {
             project {
                 packaging 'aar'
-                name 'Android Multiple Column Picker Dialog'
+                name projectName
                 url siteUrl
 
                 licenses {
                     license {
-                        name 'WTFPL'
+                        name licenseName
                         url 'http://www.wtfpl.net/txt/copying/'
                     }
                 }
                 developers {
                     developer {
                         id 'twiceyuan'
-                        name 'twiceyuan'
+                        name developerName
                         email 'twiceyuan@gmail.com'
                     }
                 }
@@ -81,7 +84,7 @@ task javadoc(type: Javadoc) {
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
-    from javadoc.destinationDir
+    from javadoc.getDestinationDir()
 }
 
 artifacts {

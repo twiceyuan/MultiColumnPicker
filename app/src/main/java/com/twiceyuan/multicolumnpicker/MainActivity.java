@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.litesuits.orm.db.assit.QueryBuilder;
 import com.twiceyuan.library.MultiColumnPicker;
+import com.twiceyuan.multicolumnpicker.adapter.CustomLeftAdapter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -57,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
         picker.setMapRightString(business -> business.name);
         picker.setMapLeftId(business -> business.id);
         picker.setMapRightId(business -> business.id);
+        picker.setLeftAdapter((mapper, businesses) ->
+                new CustomLeftAdapter<>(businesses, mapper)); // 配置自定义适配器
         picker.setLeftDefault(0);
         picker.show();
     }

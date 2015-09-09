@@ -26,7 +26,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:23.0.1'
-    compile 'com.twiceyuan.multicolumnpicker:library:1.0.2'
+    compile project(':library')
 }
 
 apply plugin: 'me.tatarka.retrolambda'
