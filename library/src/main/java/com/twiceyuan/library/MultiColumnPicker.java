@@ -226,8 +226,17 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
      * @param width  宽度
      * @param height 高度
      */
-    public MultiColumnPicker setSize(int width, int height) {
-        mSize = new DialogHelper.Size(width, height);
+    public MultiColumnPicker setSize(float width, float height) {
+        // dp -> px
+        int widthPx = DensityUtil.dip2px(mContext, width);
+        int heightPx = DensityUtil.dip2px(mContext, height);
+
+        // compare screen size and set screen size if the value too large
+        int screenWidth = DensityUtil.screenWidth(mContext);
+        int screenHeight = DensityUtil.screenHeight(mContext);
+        widthPx = widthPx > screenWidth ? screenWidth : widthPx;
+        heightPx = heightPx > screenHeight ? screenHeight : heightPx;
+        mSize = new DialogHelper.Size(widthPx, heightPx);
         return this;
     }
 
@@ -255,5 +264,13 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
      */
     public void setRightAdapter(OnRightAdapterSet<Right> onRightAdapterSet) {
         mOnRightAdapterSet = onRightAdapterSet;
+    }
+
+    public ListView getLeftView() {
+        return mLvLeft;
+    }
+
+    public ListView getRightView() {
+        return mLvRight;
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <drawable name="unchecked_bg">#818181</drawable>
+    <drawable name="unchecked_bg">#f4f4f4</drawable>
     <drawable name="unchecked_text">#f0000000</drawable>
-    <drawable name="checked_bg">#f0000000</drawable>
-    <drawable name="checked_text">#ffcccccc</drawable>
+    <drawable name="checked_bg">#3170ad</drawable>
+    <drawable name="checked_text">#ffffff</drawable>
 </resources>

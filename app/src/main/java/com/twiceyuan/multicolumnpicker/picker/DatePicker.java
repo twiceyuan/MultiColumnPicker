@@ -28,7 +28,7 @@ public class DatePicker {
         picker.setMapRightString(s -> s + "月");
         picker.setLeftDefault((Object) 2015);
         picker.setWeight(1, 1);
-        picker.setSize(1000, 1000);
+        picker.setSize(400, 400);
         picker.show();
     }
 

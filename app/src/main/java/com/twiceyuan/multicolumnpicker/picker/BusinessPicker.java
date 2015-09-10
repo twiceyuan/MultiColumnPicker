@@ -32,6 +32,7 @@ public class BusinessPicker {
         picker.setMapRightId(business -> business.id);
         picker.setLeftAdapter((mapper, businesses) ->
                 new CustomLeftAdapter<>(businesses, mapper)); // 配置自定义适配器
+        picker.getLeftView().setDividerHeight(0);
         picker.setLeftDefault(0);
         picker.show();
     }
