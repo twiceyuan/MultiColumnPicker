@@ -33,8 +33,8 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
     private MapString<Right> mMapRightString;
     private MapId<Left> mMapLeftId;
     private MapId<Right> mMapRightId;
-    private OnLeftAdapterSet<Left> mOnLeftAdapterSet;
-    private OnRightAdapterSet<Right> mOnRightAdapterSet;
+    private OnLeftAdapterProvide<Left> mOnLeftAdapterProvide;
+    private OnRightAdapterProvide<Right> mOnRightAdapterProvide;
     private List<Left> mLeftData;
 
     private LinearLayout mContainer;
@@ -68,8 +68,8 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
                 final List<Right> rights = mOnLeftSelected.onLeftSelected(position, lefts.get(position));
 
                 // 判断是否提供自定义 Adapter
-                if (mOnRightAdapterSet != null) {
-                    mRightAdapter = mOnRightAdapterSet.provideRightAdapter(this, rights);
+                if (mOnRightAdapterProvide != null) {
+                    mRightAdapter = mOnRightAdapterProvide.provideRightAdapter(this, rights);
                 } else {
                     mRightAdapter = new SimpleRightAdapter<>(rights, this);
                 }
@@ -124,7 +124,7 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
      *
      * @param position 左列默认位置
      */
-    public MultiColumnPicker setLeftDefault(int position) {
+    public MultiColumnPicker setLeftDefaultPosition(int position) {
         mDefaultPosition = position;
         return this;
     }
@@ -134,7 +134,7 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
      *
      * @param defaultId 默认值 ID
      */
-    public MultiColumnPicker setLeftDefault(Object defaultId) {
+    public MultiColumnPicker setLeftDefaultId(Object defaultId) {
         if (mMapLeftId == null) {
             throw new NoSuchMethodError("没有配置 MapLeftId");
         }
@@ -153,40 +153,19 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
      *
      * @param defaultString 默认值的显示文字
      */
-    public MultiColumnPicker setLeftDefault(String defaultString) {
+    public MultiColumnPicker setLeftDefaultString(String defaultString) {
         if (mMapLeftString == null) {
-            throw new NoSuchMethodError("没有配置 MapLeftId");
+            throw new NoSuchMethodError("没有配置 MapLeftString");
         }
         for (int i = 0; i < mLeftData.size(); i++) {
-            if (mMapLeftString.getString(mLeftData.get(mDefaultPosition)).equals(defaultString)) {
+            Log.i(TAG, mMapLeftString.getString(mLeftData.get(i)));
+            if (mMapLeftString.getString(mLeftData.get(i)).equals(defaultString)) {
                 mDefaultPosition = i;
                 return this;
             }
         }
         Log.e(TAG, "没有找到 String 为" + defaultString + "的选项");
         return this;
-    }
-
-    /**
-     * 显示
-     */
-    public void show() {
-        // 判断是否提供自定义 Adapter
-        if (mOnLeftAdapterSet != null) {
-            mLeftAdapter = mOnLeftAdapterSet.provideLeftAdapter(this, mLeftData);
-        } else {
-            mLeftAdapter = new SimpleLeftAdapter<>(mLeftData, this);
-        }
-        mLvLeft.setAdapter(mLeftAdapter);
-        // 滚到默认值
-        mLvLeft.performItemClick(mLvLeft.getChildAt(mDefaultPosition), mDefaultPosition, 0);
-        mLvLeft.setSelection(mDefaultPosition);
-        mDialog = new AlertDialog.Builder(mContext)
-                .setView(mRoot)
-                .show();
-        if (mSize != null) {
-            mSize.resize(mDialog);
-        }
     }
 
     @Override
@@ -223,8 +202,8 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
     /**
      * 设置对话框尺寸（默认都为 match_parent）
      *
-     * @param width  宽度
-     * @param height 高度
+     * @param width  宽度 (dp)
+     * @param height 高度 (dp)
      */
     public MultiColumnPicker setSize(float width, float height) {
         // dp -> px
@@ -240,30 +219,30 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
         return this;
     }
 
-    public interface OnLeftAdapterSet<Left> {
+    public interface OnLeftAdapterProvide<Left> {
         ColumnAdapter<Left> provideLeftAdapter(LeftStringMapper<Left> mapper, List<Left> lefts);
     }
 
-    public interface OnRightAdapterSet<Right> {
+    public interface OnRightAdapterProvide<Right> {
         ColumnAdapter<Right> provideRightAdapter(RightStringMapper<Right> mapper, List<Right> rights);
     }
 
     /**
      * 配置左侧适配器回调
      *
-     * @param onLeftAdapterSet 左侧适配器回调
+     * @param onLeftAdapterProvide 左侧适配器回调
      */
-    public void setLeftAdapter(OnLeftAdapterSet<Left> onLeftAdapterSet) {
-        mOnLeftAdapterSet = onLeftAdapterSet;
+    public void setLeftAdapter(OnLeftAdapterProvide<Left> onLeftAdapterProvide) {
+        mOnLeftAdapterProvide = onLeftAdapterProvide;
     }
 
     /**
      * 配置右侧适配器回调
      *
-     * @param onRightAdapterSet 右侧适配器回调
+     * @param onRightAdapterProvide 右侧适配器回调
      */
-    public void setRightAdapter(OnRightAdapterSet<Right> onRightAdapterSet) {
-        mOnRightAdapterSet = onRightAdapterSet;
+    public void setRightAdapter(OnRightAdapterProvide<Right> onRightAdapterProvide) {
+        mOnRightAdapterProvide = onRightAdapterProvide;
     }
 
     public ListView getLeftView() {
@@ -272,5 +251,27 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
 
     public ListView getRightView() {
         return mLvRight;
+    }
+
+    /**
+     * 显示
+     */
+    public void show() {
+        // 判断是否提供自定义 Adapter
+        if (mOnLeftAdapterProvide != null) {
+            mLeftAdapter = mOnLeftAdapterProvide.provideLeftAdapter(this, mLeftData);
+        } else {
+            mLeftAdapter = new SimpleLeftAdapter<>(mLeftData, this);
+        }
+        mLvLeft.setAdapter(mLeftAdapter);
+        // 滚到默认值
+        mLvLeft.performItemClick(mLvLeft.getChildAt(mDefaultPosition), mDefaultPosition, 0);
+        mLvLeft.setSelection(mDefaultPosition);
+        mDialog = new AlertDialog.Builder(mContext)
+                .setView(mRoot)
+                .show();
+        if (mSize != null) {
+            mSize.resize(mDialog);
+        }
     }
 }

@@ -29,7 +29,7 @@ public class CityPicker {
         picker.setMapRightString(city -> city.fullName);
         picker.setMapLeftId(city -> city.id);
         picker.setMapRightId(city -> city.id);
-        picker.setLeftDefault("江苏");
+        picker.setLeftDefaultString("江苏");
         picker.show();
     }
 
