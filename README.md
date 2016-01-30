@@ -9,9 +9,9 @@ a simple multiple dialog to pick linked data.
 Screenshot
 ===
 
-<img src="Screenshot1.png" alt="Screenshot" style="width: 180px;"/>
-<img src="Screenshot2.png" alt="Screenshot" style="width: 180px;"/>
-<img src="Screenshot3.png" alt="Screenshot" style="width: 180px;"/>
+<img src="art/Screenshot1.png" alt="Screenshot" style="width: 180px;"/>
+<img src="art/Screenshot2.png" alt="Screenshot" style="width: 180px;"/>
+<img src="art/Screenshot3.png" alt="Screenshot" style="width: 180px;"/>
 
 Sample
 ===
