@@ -5,31 +5,11 @@
     <option name="FORCE_JUMBO" value="true" />
     <option name="CORE_LIBRARY" value="true" />
   </component>
-  <component name="EntryPointsManager">
-    <entry_points version="2.0" />
-  </component>
-  <component name="NullableNotNullManager">
-    <option name="myDefaultNullable" value="android.support.annotation.Nullable" />
-    <option name="myDefaultNotNull" value="android.support.annotation.NonNull" />
-    <option name="myNullables">
-      <value>
-        <list size="4">
-          <item index="0" class="java.lang.String" itemvalue="org.jetbrains.annotations.Nullable" />
-          <item index="1" class="java.lang.String" itemvalue="javax.annotation.Nullable" />
-          <item index="2" class="java.lang.String" itemvalue="edu.umd.cs.findbugs.annotations.Nullable" />
-          <item index="3" class="java.lang.String" itemvalue="android.support.annotation.Nullable" />
-        </list>
-      </value>
-    </option>
-    <option name="myNotNulls">
-      <value>
-        <list size="4">
-          <item index="0" class="java.lang.String" itemvalue="org.jetbrains.annotations.NotNull" />
-          <item index="1" class="java.lang.String" itemvalue="javax.annotation.Nonnull" />
-          <item index="2" class="java.lang.String" itemvalue="edu.umd.cs.findbugs.annotations.NonNull" />
-          <item index="3" class="java.lang.String" itemvalue="android.support.annotation.NonNull" />
-        </list>
-      </value>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="Bundled (Maven 3)" />
+      </MavenGeneralSettings>
     </option>
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
@@ -47,6 +27,9 @@
           </State>
           <State>
             <id>Class structureJava</id>
+          </State>
+          <State>
+            <id>Code maturity issuesJava</id>
           </State>
           <State>
             <id>Data flow issuesJava</id>
@@ -70,6 +53,12 @@
             <id>Java</id>
           </State>
           <State>
+            <id>Java language level migration aidsJava</id>
+          </State>
+          <State>
+            <id>Javadoc issuesJava</id>
+          </State>
+          <State>
             <id>Logging issuesJava</id>
           </State>
           <State>
@@ -85,6 +74,9 @@
             <id>Pattern Validation</id>
           </State>
           <State>
+            <id>Performance issuesJava</id>
+          </State>
+          <State>
             <id>Portability issuesJava</id>
           </State>
           <State>
@@ -98,6 +90,9 @@
           </State>
           <State>
             <id>Serialization issuesJava</id>
+          </State>
+          <State>
+            <id>TestNG</id>
           </State>
           <State>
             <id>Threading issuesGroovy</id>
@@ -134,7 +129,7 @@
     <states>
       <state key="ProjectJDKs.UI">
         <settings>
-          <last-edited>1.8</last-edited>
+          <last-edited>Android API 23 Platform</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

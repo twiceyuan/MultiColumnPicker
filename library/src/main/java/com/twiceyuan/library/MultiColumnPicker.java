@@ -158,7 +158,6 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
             throw new NoSuchMethodError("没有配置 MapLeftString");
         }
         for (int i = 0; i < mLeftData.size(); i++) {
-            Log.i(TAG, mMapLeftString.getString(mLeftData.get(i)));
             if (mMapLeftString.getString(mLeftData.get(i)).equals(defaultString)) {
                 mDefaultPosition = i;
                 return this;
