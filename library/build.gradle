@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'me.tatarka.retrolambda'
 
 version = "1.1.3"
 
@@ -32,81 +31,26 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
 }
 
-def siteUrl = 'https://github.com/twiceyuan/MultiColumnPicker'
-def gitUrl = 'https://github.com/twiceyuan/MultiColumnPicker.git'
-def projectName = 'Android Multiple Column Picker Dialog'
-def licenseName = 'WTFPL'
-def developerName = 'twiceyuan'
-group = "com.twiceyuan.multicolumnpicker"
-
-install {
-    repositories.mavenInstaller {
-        pom {
-            project {
-                packaging 'aar'
-                name projectName
-                url siteUrl
-
-                licenses {
-                    license {
-                        name licenseName
-                        url 'http://www.wtfpl.net/txt/copying/'
-                    }
-                }
-                developers {
-                    developer {
-                        id 'twiceyuan'
-                        name developerName
-                        email 'twiceyuan@gmail.com'
-                    }
-                }
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
-                }
-            }
-        }
-    }
-}
-
-
+// build a jar with source files
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
-    classifier = 'source'
+    classifier = 'sources'
 }
 
 task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
+    failOnError false
+    source = android.sourceSets.main.java.sourceFiles
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    options.encoding = 'UTF-8'
+    classpath += configurations.compile
 }
 
+// build a jar with javadoc
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
-    from javadoc.getDestinationDir()
+    from javadoc.destinationDir
 }
 
 artifacts {
-    archives javadocJar
     archives sourcesJar
+    archives javadocJar
 }
-
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-    configurations = ['archives']
-    pkg {
-        repo = "maven"
-        name = "MultiColumnPicker"
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = ["WTFPL"]
-        publish = true
-    }
-}
-
-apply plugin: 'me.tatarka.retrolambda'
