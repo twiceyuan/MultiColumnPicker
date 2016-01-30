@@ -1,8 +1,8 @@
 # MultiColumnPicker
 
 ![Android Library](https://img.shields.io/badge/platform-android-green.svg)
-[ ![Download](https://api.bintray.com/packages/twiceyuan/maven/MultiColumnPicker/images/download.svg) ](https://bintray.com/twiceyuan/maven/MultiColumnPicker/_latestVersion)
-[ ![WTFPL](http://img.shields.io/badge/license-WTFPL-green.svg)](http://www.wtfpl.net/txt/copying/)
+[![](https://jitpack.io/v/twiceyuan/MultiColumnPicker.svg)](https://jitpack.io/#twiceyuan/MultiColumnPicker)
+[![WTFPL](http://img.shields.io/badge/license-WTFPL-green.svg)](http://www.wtfpl.net/txt/copying/)
 
 a simple multiple dialog to pick linked data.
 
@@ -50,15 +50,21 @@ picker.show(); // display
 
 Read sample module to find more detail.
 
-Usage
+Setup
 ===
 
 Module Gradle File
 
 ```Groovy
+
+repositories {
+    // ...
+    maven { url "https://jitpack.io" }
+}
+
 dependencies {
-    //...
-    compile 'com.twiceyuan.multicolumnpicker:library:[version code]'
+    // ...
+	compile 'com.github.twiceyuan:MultiColumnPicker:1.1.3'
 }
 ```
 
