@@ -21,7 +21,7 @@ import com.twiceyuan.library.map.RightStringMapper;
 import java.util.List;
 
 @SuppressWarnings({"unused", "FieldCanBeLocal"})
-public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, RightStringMapper<Right> {
+public class MultiColumnPicker<Parent, Child> implements LeftStringMapper<Parent>, RightStringMapper<Child> {
 
     private final String TAG = "MultiColumnPicker";
 
@@ -29,24 +29,24 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
 
     private Context mContext;
 
-    private OnLeftSelected<Left, Right>  mOnLeftSelected;
-    private OnRightSelected<Left, Right> mOnRightSelected;
-    private MapString<Left>              mMapLeftString;
-    private MapString<Right>             mMapRightString;
-    private MapId<Left>                  mMapLeftId;
-    private MapId<Right>                 mMapRightId;
-    private OnLeftAdapterProvide<Left>   mOnLeftAdapterProvide;
-    private OnRightAdapterProvide<Right> mOnRightAdapterProvide;
-    private List<Left>                   mLeftData;
+    private OnLeftSelected<Parent, Child>  mOnLeftSelected; // 父节点被选择时的回调
+    private OnRightSelected<Parent, Child> mOnRightSelected;
+    private MapString<Parent>              mMapLeftString;
+    private MapString<Child>               mMapRightString;
+    private MapId<Parent>                  mMapLeftId;
+    private MapId<Child>                   mMapRightId;
+    private OnLeftAdapterProvide<Parent>   mOnLeftAdapterProvide;
+    private OnRightAdapterProvide<Child>   mOnRightAdapterProvide;
+    private List<Parent>                   mParentData;
 
     private LinearLayout mContainer;
-    private ListView     mLvLeft;
-    private ListView     mLvRight;
+    private ListView     mParentListView;
+    private ListView     mChildListView;
     private View         mRoot;
     private AlertDialog  mDialog;
 
-    private ColumnAdapter<Left>  mLeftAdapter;
-    private ColumnAdapter<Right> mRightAdapter;
+    private ColumnAdapter<Parent> mLeftAdapter;
+    private ColumnAdapter<Child>  mRightAdapter;
 
     private int mDefaultLeftPosition  = 0;
     private int mDefaultRightPosition = 0;
@@ -57,31 +57,31 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
         mContext = context;
         mRoot = View.inflate(context, R.layout.multicolomn_dialog_picker, null);
         mContainer = (LinearLayout) mRoot.findViewById(R.id.ll_container);
-        mLvLeft = (ListView) mRoot.findViewById(R.id.lv_left);
-        mLvRight = (ListView) mRoot.findViewById(R.id.lv_right);
+        mParentListView = (ListView) mRoot.findViewById(R.id.lv_left);
+        mChildListView = (ListView) mRoot.findViewById(R.id.lv_right);
     }
 
     /**
      * 配置左侧内容
      */
-    public MultiColumnPicker setLeftContent(final List<Left> lefts) {
-        mLeftData = lefts;
-        mLvLeft.setOnItemClickListener((parent, view, position, id) -> {
-            mLvLeft.setItemChecked(position, true);
+    public MultiColumnPicker setLeftContent(final List<Parent> parents) {
+        mParentData = parents;
+        mParentListView.setOnItemClickListener((parent, view, position, id) -> {
+            mParentListView.setItemChecked(position, true);
             if (mOnLeftSelected != null) {
-                final List<Right> rights = mOnLeftSelected.onLeftSelected(position, lefts.get(position));
+                final List<Child> children = mOnLeftSelected.onLeftSelected(position, parents.get(position));
 
                 // 判断是否提供自定义 Adapter
                 if (mOnRightAdapterProvide != null) {
-                    mRightAdapter = mOnRightAdapterProvide.provideRightAdapter(this, rights);
+                    mRightAdapter = mOnRightAdapterProvide.provideRightAdapter(this, children);
                 } else {
-                    mRightAdapter = new SimpleRightAdapter<>(rights, this);
+                    mRightAdapter = new SimpleRightAdapter<>(children, this);
                 }
-                mLvRight.setAdapter(mRightAdapter);
+                mChildListView.setAdapter(mRightAdapter);
                 mLeftCreatePartner.before();
-                mLvRight.setOnItemClickListener((parent1, view1, position2, id1) -> {
+                mChildListView.setOnItemClickListener((parent1, view1, position2, id1) -> {
                     if (mOnRightSelected != null) {
-                        mOnRightSelected.onRightSelected(lefts.get(position), rights.get(position2));
+                        mOnRightSelected.onRightSelected(parents.get(position), children.get(position2));
                         mDialog.dismiss();
                     }
                 });
@@ -93,7 +93,7 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
     /**
      * 配置左侧监听器（联动右侧适配器）
      */
-    public MultiColumnPicker setOnLeftSelected(OnLeftSelected<Left, Right> onLeftSelected) {
+    public MultiColumnPicker setOnLeftSelected(OnLeftSelected<Parent, Child> onLeftSelected) {
         mOnLeftSelected = onLeftSelected;
         return this;
     }
@@ -101,26 +101,26 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
     /**
      * 配置右侧监听器（结束回调结果）
      */
-    public MultiColumnPicker setOnRightSelected(OnRightSelected<Left, Right> onRightSelected) {
+    public MultiColumnPicker setOnRightSelected(OnRightSelected<Parent, Child> onRightSelected) {
         mOnRightSelected = onRightSelected;
         return this;
     }
 
-    public MultiColumnPicker setMapLeftString(MapString<Left> mapLeftString) {
+    public MultiColumnPicker setMapLeftString(MapString<Parent> mapLeftString) {
         mMapLeftString = mapLeftString;
         return this;
     }
 
-    public MultiColumnPicker setMapRightString(MapString<Right> mapRightString) {
+    public MultiColumnPicker setMapRightString(MapString<Child> mapRightString) {
         mMapRightString = mapRightString;
         return this;
     }
 
-    public void setMapLeftId(MapId<Left> mapLeftId) {
+    public void setMapLeftId(MapId<Parent> mapLeftId) {
         mMapLeftId = mapLeftId;
     }
 
-    public void setMapRightId(MapId<Right> mapRightId) {
+    public void setMapRightId(MapId<Child> mapRightId) {
         mMapRightId = mapRightId;
     }
 
@@ -143,8 +143,8 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
         if (mMapLeftId == null) {
             throw new NoSuchMethodError("没有配置 MapLeftId");
         }
-        for (int i = 0; i < mLeftData.size(); i++) {
-            if (mMapLeftId.getId(mLeftData.get(i)).equals(defaultId)) {
+        for (int i = 0; i < mParentData.size(); i++) {
+            if (mMapLeftId.getId(mParentData.get(i)).equals(defaultId)) {
                 mDefaultLeftPosition = i;
                 return this;
             }
@@ -162,8 +162,8 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
         if (mMapLeftString == null) {
             throw new NoSuchMethodError("没有配置 MapLeftString");
         }
-        for (int i = 0; i < mLeftData.size(); i++) {
-            if (mMapLeftString.getString(mLeftData.get(i)).equals(defaultString)) {
+        for (int i = 0; i < mParentData.size(); i++) {
+            if (mMapLeftString.getString(mParentData.get(i)).equals(defaultString)) {
                 mDefaultLeftPosition = i;
                 return this;
             }
@@ -192,10 +192,10 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
             throw new NoSuchMethodError("没有配置 MapLeftId");
         }
         setLeftDefaultId(leftId);
-        Left item = mLeftData.get(mDefaultLeftPosition);
-        List<Right> rights = mOnLeftSelected.onLeftSelected(mDefaultLeftPosition, item);
-        for (int i = 0; i < rights.size(); i++) {
-            if (mMapRightId.getId(rights.get(i)).equals(defaultId)) {
+        Parent item = mParentData.get(mDefaultLeftPosition);
+        List<Child> children = mOnLeftSelected.onLeftSelected(mDefaultLeftPosition, item);
+        for (int i = 0; i < children.size(); i++) {
+            if (mMapRightId.getId(children.get(i)).equals(defaultId)) {
                 mDefaultRightPosition = i;
                 return this;
             }
@@ -205,17 +205,17 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
     }
 
     @Override
-    public String mapLeftString(Left left) {
+    public String mapLeftString(Parent parent) {
         if (mMapLeftString != null) {
-            return mMapLeftString.getString(left);
+            return mMapLeftString.getString(parent);
         }
         return "";
     }
 
     @Override
-    public String mapRightString(Right right) {
+    public String mapRightString(Child child) {
         if (mMapRightString != null) {
-            return mMapRightString.getString(right);
+            return mMapRightString.getString(child);
         }
         return "";
     }
@@ -228,9 +228,9 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
      */
     public MultiColumnPicker setWeight(int left, int right) {
         mContainer.setWeightSum(left + right);
-        mLvLeft.setLayoutParams(
+        mParentListView.setLayoutParams(
                 new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, left));
-        mLvRight.setLayoutParams(
+        mChildListView.setLayoutParams(
                 new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, right));
         return this;
     }
@@ -268,7 +268,7 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
      *
      * @param onLeftAdapterProvide 左侧适配器回调
      */
-    public void setLeftAdapter(OnLeftAdapterProvide<Left> onLeftAdapterProvide) {
+    public void setLeftAdapter(OnLeftAdapterProvide<Parent> onLeftAdapterProvide) {
         mOnLeftAdapterProvide = onLeftAdapterProvide;
     }
 
@@ -277,16 +277,16 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
      *
      * @param onRightAdapterProvide 右侧适配器回调
      */
-    public void setRightAdapter(OnRightAdapterProvide<Right> onRightAdapterProvide) {
+    public void setRightAdapter(OnRightAdapterProvide<Child> onRightAdapterProvide) {
         mOnRightAdapterProvide = onRightAdapterProvide;
     }
 
     public ListView getLeftView() {
-        return mLvLeft;
+        return mParentListView;
     }
 
     public ListView getRightView() {
-        return mLvRight;
+        return mChildListView;
     }
 
     /**
@@ -295,19 +295,19 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
     public void show() {
         // 判断是否提供自定义 Adapter
         if (mOnLeftAdapterProvide != null) {
-            mLeftAdapter = mOnLeftAdapterProvide.provideLeftAdapter(this, mLeftData);
+            mLeftAdapter = mOnLeftAdapterProvide.provideLeftAdapter(this, mParentData);
         } else {
-            mLeftAdapter = new SimpleLeftAdapter<>(mLeftData, this);
+            mLeftAdapter = new SimpleLeftAdapter<>(mParentData, this);
         }
-        mLvLeft.setAdapter(mLeftAdapter);
+        mParentListView.setAdapter(mLeftAdapter);
         // 滚到默认值
-        mLvLeft.performItemClick(mLvLeft.getChildAt(mDefaultLeftPosition), mDefaultLeftPosition, 0);
-        mLvLeft.setSelection(mDefaultLeftPosition);
+        mParentListView.performItemClick(mParentListView.getChildAt(mDefaultLeftPosition), mDefaultLeftPosition, 0);
+        mParentListView.setSelection(mDefaultLeftPosition);
 
         mLeftCreatePartner.after(() -> {
-            mLvRight.setSelection(mDefaultRightPosition);
-            mLvRight.setItemChecked(mDefaultRightPosition, true);
-            mLvRight.smoothScrollToPosition(mDefaultRightPosition);
+            mChildListView.setSelection(mDefaultRightPosition);
+            mChildListView.setItemChecked(mDefaultRightPosition, true);
+            mChildListView.smoothScrollToPosition(mDefaultRightPosition);
         });
 
         mDialog = new AlertDialog.Builder(mContext)
