@@ -18,7 +18,7 @@ public class CityPicker {
 
     OnSelected<City, City> mOnSelected;
 
-    public void show(Context context) {
+    public void show(Context context, City defaultCity) {
         MultiColumnPicker<City, City> picker = new MultiColumnPicker<>(context);
         picker.setLeftContent(getProvince());
         picker.setOnLeftSelected((position, city) -> getCity(city));
@@ -29,7 +29,9 @@ public class CityPicker {
         picker.setMapRightString(city -> city.fullName);
         picker.setMapLeftId(city -> city.id);
         picker.setMapRightId(city -> city.id);
-        picker.setLeftDefaultString("江苏");
+        if (defaultCity != null) {
+            picker.setRightDefaultId(defaultCity.parent, defaultCity.id);
+        }
         picker.show();
     }
 

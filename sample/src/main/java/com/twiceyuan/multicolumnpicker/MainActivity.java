@@ -16,6 +16,9 @@ import java.io.InputStreamReader;
 
 public class MainActivity extends AppCompatActivity {
 
+    City     mCity;
+    Business mBusiness;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,18 +32,20 @@ public class MainActivity extends AppCompatActivity {
      * Test Pick a city
      */
     public void test(View view) {
-        new CityPicker()
-                .setOnSelected((city3, city21) -> action(city3.fullName + "/" + city21.fullName))
-                .show(this);
+        new CityPicker().setOnSelected((province, city) -> {
+            mCity = city;
+            action(province.fullName + "/" + city.fullName);
+        }).show(this, mCity);
     }
 
     /**
      * Test Pick a business (Use custom adapter)
      */
     public void test2(View view) {
-        new BusinessPicker()
-                .setOnSelected((business, business2) -> action(business.name + "/" + business2.name))
-                .show(this);
+        new BusinessPicker().setOnSelected((business, business2) -> {
+            mBusiness = business2;
+            action(business.name + "/" + business2.name);
+        }).show(this, mBusiness);
     }
 
     /**

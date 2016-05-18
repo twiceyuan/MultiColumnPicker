@@ -25,28 +25,32 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
 
     private final String TAG = "MultiColumnPicker";
 
+    private Partner mLeftCreatePartner = Partner.build();
+
     private Context mContext;
 
-    private OnLeftSelected<Left, Right> mOnLeftSelected;
+    private OnLeftSelected<Left, Right>  mOnLeftSelected;
     private OnRightSelected<Left, Right> mOnRightSelected;
-    private MapString<Left> mMapLeftString;
-    private MapString<Right> mMapRightString;
-    private MapId<Left> mMapLeftId;
-    private MapId<Right> mMapRightId;
-    private OnLeftAdapterProvide<Left> mOnLeftAdapterProvide;
+    private MapString<Left>              mMapLeftString;
+    private MapString<Right>             mMapRightString;
+    private MapId<Left>                  mMapLeftId;
+    private MapId<Right>                 mMapRightId;
+    private OnLeftAdapterProvide<Left>   mOnLeftAdapterProvide;
     private OnRightAdapterProvide<Right> mOnRightAdapterProvide;
-    private List<Left> mLeftData;
+    private List<Left>                   mLeftData;
 
     private LinearLayout mContainer;
-    private ListView mLvLeft;
-    private ListView mLvRight;
-    private View mRoot;
-    private AlertDialog mDialog;
+    private ListView     mLvLeft;
+    private ListView     mLvRight;
+    private View         mRoot;
+    private AlertDialog  mDialog;
 
-    private ColumnAdapter<Left> mLeftAdapter;
+    private ColumnAdapter<Left>  mLeftAdapter;
     private ColumnAdapter<Right> mRightAdapter;
 
-    private int mDefaultPosition = 0;
+    private int mDefaultLeftPosition  = 0;
+    private int mDefaultRightPosition = 0;
+
     private DialogHelper.Size mSize;
 
     public MultiColumnPicker(Context context) {
@@ -74,6 +78,7 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
                     mRightAdapter = new SimpleRightAdapter<>(rights, this);
                 }
                 mLvRight.setAdapter(mRightAdapter);
+                mLeftCreatePartner.before();
                 mLvRight.setOnItemClickListener((parent1, view1, position2, id1) -> {
                     if (mOnRightSelected != null) {
                         mOnRightSelected.onRightSelected(lefts.get(position), rights.get(position2));
@@ -125,7 +130,7 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
      * @param position 左列默认位置
      */
     public MultiColumnPicker setLeftDefaultPosition(int position) {
-        mDefaultPosition = position;
+        mDefaultLeftPosition = position;
         return this;
     }
 
@@ -140,7 +145,7 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
         }
         for (int i = 0; i < mLeftData.size(); i++) {
             if (mMapLeftId.getId(mLeftData.get(i)).equals(defaultId)) {
-                mDefaultPosition = i;
+                mDefaultLeftPosition = i;
                 return this;
             }
         }
@@ -159,11 +164,43 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
         }
         for (int i = 0; i < mLeftData.size(); i++) {
             if (mMapLeftString.getString(mLeftData.get(i)).equals(defaultString)) {
-                mDefaultPosition = i;
+                mDefaultLeftPosition = i;
                 return this;
             }
         }
         Log.e(TAG, "没有找到 String 为" + defaultString + "的选项");
+        return this;
+    }
+
+    /**
+     * 设置默认值
+     *
+     * @param position 左列默认位置
+     */
+    public MultiColumnPicker setRightDefaultPosition(int position) {
+        mDefaultRightPosition = position;
+        return this;
+    }
+
+    /**
+     * 设置默认值
+     *
+     * @param defaultId 默认值 ID
+     */
+    public MultiColumnPicker setRightDefaultId(Object leftId, Object defaultId) {
+        if (mMapRightId == null) {
+            throw new NoSuchMethodError("没有配置 MapLeftId");
+        }
+        setLeftDefaultId(leftId);
+        Left item = mLeftData.get(mDefaultLeftPosition);
+        List<Right> rights = mOnLeftSelected.onLeftSelected(mDefaultLeftPosition, item);
+        for (int i = 0; i < rights.size(); i++) {
+            if (mMapRightId.getId(rights.get(i)).equals(defaultId)) {
+                mDefaultRightPosition = i;
+                return this;
+            }
+        }
+        Log.e(TAG, "没有找到 ID 为" + defaultId + "的选项");
         return this;
     }
 
@@ -264,8 +301,15 @@ public class MultiColumnPicker<Left, Right> implements LeftStringMapper<Left>, R
         }
         mLvLeft.setAdapter(mLeftAdapter);
         // 滚到默认值
-        mLvLeft.performItemClick(mLvLeft.getChildAt(mDefaultPosition), mDefaultPosition, 0);
-        mLvLeft.setSelection(mDefaultPosition);
+        mLvLeft.performItemClick(mLvLeft.getChildAt(mDefaultLeftPosition), mDefaultLeftPosition, 0);
+        mLvLeft.setSelection(mDefaultLeftPosition);
+
+        mLeftCreatePartner.after(() -> {
+            mLvRight.setSelection(mDefaultRightPosition);
+            mLvRight.setItemChecked(mDefaultRightPosition, true);
+            mLvRight.smoothScrollToPosition(mDefaultRightPosition);
+        });
+
         mDialog = new AlertDialog.Builder(mContext)
                 .setView(mRoot)
                 .show();

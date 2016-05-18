@@ -19,12 +19,10 @@ public class BusinessPicker {
 
     OnSelected<Business, Business> mOnSelected;
 
-    public void show(Context context) {
+    public void show(Context context, Business defaultBusiness) {
         MultiColumnPicker<Business, Business> picker = new MultiColumnPicker<>(context);
         picker.setLeftContent(getCategories());
         picker.setOnLeftSelected((position, business) -> getBusiness(business));
-        // don't use lambda
-        //noinspection Convert2MethodRef
         picker.setOnRightSelected((business1, business2) -> mOnSelected.onSelect(business1, business2));
         picker.setMapLeftString(business -> business.name);
         picker.setMapRightString(business -> business.name);
@@ -33,7 +31,9 @@ public class BusinessPicker {
         picker.setLeftAdapter((mapper, businesses) ->
                 new CustomLeftAdapter<>(businesses, mapper)); // 配置自定义适配器
         picker.getLeftView().setDividerHeight(0);
-        picker.setLeftDefaultPosition(0);
+        if (defaultBusiness != null) {
+            picker.setRightDefaultId(defaultBusiness.parent, defaultBusiness.id);
+        }
         picker.show();
     }
 
